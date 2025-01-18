@@ -5,7 +5,7 @@ import CustomTextArea from "@/app/ui/CustomTextArea";
 import Error from "@/app/ui/Error";
 import Loading from "@/app/ui/Loading";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -58,7 +58,7 @@ const SendMessage = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        const message = await submitMessage({
+        await submitMessage({
           message: values.message,
           accountId: userId,
         });

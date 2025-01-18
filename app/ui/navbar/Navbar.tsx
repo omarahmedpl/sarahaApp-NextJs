@@ -1,7 +1,6 @@
 "use client";
 import {
   authLinksArray,
-  linksArray,
   notAuthLinksArray,
 } from "@/app/lib/consts";
 import Image from "next/image";
@@ -10,9 +9,6 @@ import React from "react";
 import NavLinkComponent from "./NavLink";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AnimatePresence, motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux/store/store";
-import { logout } from "@/app/redux/reducers/reducer";
 import { removeCookie } from "@/app/actions/auth";
 import { redirect } from "next/navigation";
 import { useAuthStore } from "@/app/zustand/store";

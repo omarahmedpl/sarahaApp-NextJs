@@ -5,8 +5,14 @@ import { loginArray } from "../lib/consts";
 import { login } from "../actions/auth";
 import { useActionState } from "react"; // Assuming this import exists
 
+const initialState = {
+  formData: {},
+  errors: {},
+};
+
 const Login: React.FC = () => {
-  const [state, action, pending] = useActionState(login);
+  const [state, action, pending] = useActionState(login, initialState);
+
   return (
     <>
       <div className="container">
@@ -18,14 +24,16 @@ const Login: React.FC = () => {
               key={input.input.id}
               input={input.input}
               error={
-                state?.errors?.[input.input.id as keyof typeof state.errors]
+                state?.errors?.[
+                  input.input.id as keyof typeof state.errors
+                ]?.join(", ") || ""
               }
               defaultValue={
                 state?.formData[input.input.name as keyof typeof state.formData]
               }
             />
           ))}
-        <div className="mb-5 lg:ms-[230px]">
+          <div className="mb-5 lg:ms-[230px]">
             <a href="/forgot-password" className="text-primary">
               Forgot Password?
             </a>

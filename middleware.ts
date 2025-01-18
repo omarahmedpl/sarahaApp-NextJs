@@ -6,7 +6,7 @@ import { IJWT } from "./app/lib/definations";
 
 export function middleware(request: NextRequest) {
   const cookie = request.cookies.get("auth-token");
-  const { id } = cookie ? jwtDecode<IJWT>(cookie.value) : "";
+  const { id } = cookie ? jwtDecode<IJWT>(cookie.value as string) : { id: "" };
   console.log(id);
   const { pathname } = request.nextUrl;
   const userId = pathname.split("u/")[1];

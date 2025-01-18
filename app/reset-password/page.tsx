@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createFormikConfig } from "../utils/formik";
+import { CreateFormikConfig } from "../utils/formik";
 import CustomInput from "../ui/CustomInput";
-import { forgetPassword, getCookie, resetPassword } from "../actions/auth";
+import { resetPassword } from "../actions/auth";
 import { resetPasswordSchema } from "../actions/schema";
 
 const ForgetPassword = ({}) => {
   const [loading, setLoading] = useState(false);
-  const resetPasswordForm = createFormikConfig(
+  const resetPasswordForm = CreateFormikConfig(
     {
       otp: "",
       password: "",
@@ -46,7 +46,7 @@ const ForgetPassword = ({}) => {
           }}
           error={
             resetPasswordForm.errors.otp && resetPasswordForm.touched.otp
-              ? resetPasswordForm.errors.otp
+              ? resetPasswordForm.errors.otp as string
               : ""
           }
           width="!w-full"
@@ -64,7 +64,7 @@ const ForgetPassword = ({}) => {
           error={
             resetPasswordForm.errors.password &&
             resetPasswordForm.touched.password
-              ? resetPasswordForm.errors.password
+              ? resetPasswordForm.errors.password as string
               : ""
           }
           width="!w-full"
@@ -82,7 +82,7 @@ const ForgetPassword = ({}) => {
           error={
             resetPasswordForm.errors.confirmationPassword &&
             resetPasswordForm.touched.confirmationPassword
-              ? resetPasswordForm.errors.confirmationPassword
+              ? resetPasswordForm.errors.confirmationPassword as string
               : ""
           }
           width="!w-full"

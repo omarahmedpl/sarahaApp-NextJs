@@ -3,7 +3,6 @@ import { FormState } from "../lib/definations";
 import { LoginFormSchema, SignupFormSchema } from "./schema";
 import toast from "react-hot-toast";
 import Cookies from "universal-cookie";
-import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import React from "react";
 export const setCookie = (name: string, value: string, expiringDate: Date) => {
@@ -22,8 +21,10 @@ export const removeCookie = (name: string) => {
   cookies.remove(name);
   console.log(cookies.get(name));
 };
-export async function signup(state: FormState, formData: FormData) {
-  // Prepare the form data to keep it if there's an error
+export async function signup(
+  state: FormState,
+  formData: FormData
+): Promise<FormState> {
   const formValues = {
     username: String(formData.get("username") || ""),
     email: String(formData.get("email") || ""),
@@ -36,67 +37,76 @@ export async function signup(state: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse(formValues);
 
   if (!validatedFields.success) {
-    toast.error("Validation failed. Please check your inputs."); // Show error toast
+    toast.error("Validation failed. Please check your inputs.");
     return {
-      errors: validatedFields.error.flatten().fieldErrors, // Contains field-specific errors
-      formData: formValues, // Return form data so it can be re-used
-      message: "Validation failed", // Optional message for general errors
+      errors: validatedFields.error.flatten().fieldErrors,
+      formData: formValues,
+      message: "Validation failed",
     };
-  } else {
-    try {
-      const { username, email, password, phone, confirmPassword } =
-        validatedFields.data;
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_HOST}/auth/signup`,
-        {
-          username,
-          email,
-          password,
-          confirmationPassword: confirmPassword,
-          phone,
+  }
+
+  try {
+    const { username, email, password, confirmPassword, phone } =
+      validatedFields.data;
+
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_HOST}/auth/signup`,
+      {
+        username,
+        email,
+        password,
+        confirmationPassword: confirmPassword,
+        phone,
+      },
+      {
+        headers: {
+          "Accept-Language": "en",
         },
-        {
-          headers: {
-            "Accept-Language": "en",
-          },
-        }
-      );
-      toast.success("Signup successful! Please Confirm Your Email..."); // Show success toast
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 500);
-      return {
-        message: "Signup successful",
-        formData: formValues, // Optionally return form data to be used later
-      };
-    } catch (e: unknown) {
-      const errorResponse = e.response?.data;
-      if (errorResponse) {
-        // Display the main message
-        if (errorResponse.message) {
-          toast.error(errorResponse.message);
-        }
-        // Display individual validation errors
-        if (errorResponse.errors && Array.isArray(errorResponse.errors)) {
-          errorResponse.errors.forEach((err: any) => {
-            if (err.message) {
-              toast.error(err.message); // Show each error message in a toast
-            }
-          });
-        }
-      } else {
-        toast.error("An unexpected error occurred.");
       }
-      return {
-        errors: [],
-        formData: formValues, // Return form data in case of an unexpected error
-      };
+    );
+
+    toast.success("Signup successful! Please Confirm Your Email...");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 500);
+
+    return {
+      message: "Signup successful",
+      formData: formValues,
+    };
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const errorResponse = (e as any)?.response?.data;
+
+    if (errorResponse) {
+      if (errorResponse.message) {
+        toast.error(errorResponse.message);
+      }
+      if (errorResponse.errors && Array.isArray(errorResponse.errors)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        errorResponse.errors.forEach((err: any) => {
+          if (err.message) {
+            toast.error(err.message);
+          }
+        });
+      }
+    } else {
+      toast.error("An unexpected error occurred.");
     }
+
+    return {
+      errors: errorResponse?.errors || {},
+      formData: formValues,
+      message: "Signup failed",
+    };
   }
 }
 
-export async function login(state: FormState, formData: FormData) {
-  // Prepare the form data to keep it if there's an error
+export async function login(
+  state: FormState,
+  formData: FormData
+): Promise<FormState> {
+  // Prepare the form data
   const formValues = {
     email: String(formData.get("email") || ""),
     password: String(formData.get("password") || ""),
@@ -109,59 +119,62 @@ export async function login(state: FormState, formData: FormData) {
     toast.error("Validation failed. Please check your inputs."); // Show error toast
     return {
       errors: validatedFields.error.flatten().fieldErrors, // Contains field-specific errors
-      formData: formValues, // Return form data so it can be re-used
-      message: "Validation failed", // Optional message for general errors
+      formData: formValues, // Return form data for reuse
+      message: "Validation failed",
     };
   } else {
     try {
       const { email, password } = validatedFields.data;
+
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_HOST}/auth/login`,
+        { email, password },
         {
-          email,
-          password,
-        },
-        {
-          headers: {
-            "Accept-Language": "en",
-          },
+          headers: { "Accept-Language": "en" },
         }
       );
-      console.log(response.data);
+
       toast.success(`Welcome ${response.data.data.username}`); // Show success toast
+
       setCookie(
         "auth-token",
         response.data.data.token,
         new Date(Date.now() + 60 * 60 * 1000)
       );
+
       setTimeout(() => {
         window.location.href = "/profile";
       }, 500);
+
       return {
-        message: "Signup successful",
-        formData: formValues, // Optionally return form data to be used later
+        message: "Login successful",
+        formData: formValues,
       };
-    } catch (e: unknown) {
-      const errorResponse = e.response?.data;
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorResponse = (e as any)?.response?.data;
+
       if (errorResponse) {
-        // Display the main message
         if (errorResponse.message) {
           toast.error(errorResponse.message);
         }
-        // Display individual validation errors
+
         if (errorResponse.errors && Array.isArray(errorResponse.errors)) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           errorResponse.errors.forEach((err: any) => {
             if (err.message) {
-              toast.error(err.message); // Show each error message in a toast
+              toast.error(err.message); // Show individual error messages
             }
           });
         }
       } else {
         toast.error("An unexpected error occurred.");
       }
+
       return {
-        errors: [],
-        formData: formValues, // Return form data in case of an unexpected error
+        errors: errorResponse?.errors || {},
+        formData: formValues,
+        message: "Login failed",
       };
     }
   }

@@ -4,17 +4,14 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { getCookie } from "../actions/auth";
-import { useDispatch } from "react-redux";
-import { logout, setSession } from "../redux/reducers/reducer";
 import Loading from "../ui/Loading";
-import { useStore } from "zustand";
-import { log } from "console";
 import { useAuthStore } from "../zustand/store";
 
 const SessionManager: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [sessionStatus, setSessionStatus] = useState<string | null>(null);
+  const [, setSessionStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [userData, setUserData] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [, setUserData] = useState<any>(null);
   const { setSession, logout } = useAuthStore();
   useEffect(() => {
     const token = getCookie("auth-token"); // Retrieve JWT from cookies

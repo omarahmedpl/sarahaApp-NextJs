@@ -1,14 +1,11 @@
 "use client";
-import { confirmEmail } from "@/app/actions/auth";
 import { confirmUpdateEmail } from "@/app/actions/user";
 import Error from "@/app/ui/Error";
 import Loading from "@/app/ui/Loading";
 import { usePathname } from "next/navigation";
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-interface IpageProps {}
-
-const ConfirmEmail: FC<IpageProps> = ({}) => {
+const ConfirmEmail = ({}) => {
   const emailToken = usePathname().split("/confirmUpdateEmail/")[1];
   const [loading, setLoading] = useState(false);
   const isMount = useRef(true);
@@ -18,7 +15,7 @@ const ConfirmEmail: FC<IpageProps> = ({}) => {
     const confirm = async () => {
       try {
         setLoading(true);
-        await confirmUpdateEmail({ token: emailToken });
+        await confirmUpdateEmail({ token: emailToken, setError });
       } catch (error) {
         console.log(error);
         setError(error.message);

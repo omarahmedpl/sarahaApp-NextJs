@@ -14,7 +14,6 @@ import ProfileCard from "../profile/ProfileCard";
 import EditProfileSection from "../ui/EditProfileSection";
 import { FaLock, FaMailBulk, FaUser } from "react-icons/fa";
 import { useAuthStore } from "../zustand/store";
-import { useFormik } from "formik";
 import {
   updateEmailSchema,
   updateInformationSchema,
@@ -23,7 +22,7 @@ import {
 import CustomInput from "../ui/CustomInput";
 import CustomTextArea from "../ui/CustomTextArea";
 import CustomSelect from "../ui/CustomSelect";
-import { createFormikConfig } from "../utils/formik";
+import { CreateFormikConfig } from "../utils/formik";
 
 const Manage = () => {
   const { logout } = useAuthStore();
@@ -77,8 +76,7 @@ const Manage = () => {
     }
   };
 
-
-  const updatePasswordForm = createFormikConfig(
+  const updatePasswordForm = CreateFormikConfig(
     {
       currentPassword: "",
       password: "",
@@ -96,7 +94,7 @@ const Manage = () => {
     }
   );
 
-  const updateEmailForm = createFormikConfig(
+  const updateEmailForm = CreateFormikConfig(
     { email: "" },
     updateEmailSchema,
     async (values) => {
@@ -110,7 +108,7 @@ const Manage = () => {
     }
   );
 
-  const updateInformationForm = createFormikConfig(
+  const updateInformationForm = CreateFormikConfig(
     {
       username: user?.username || "",
       bio: user?.bio || "",
@@ -181,6 +179,8 @@ const Manage = () => {
               error={
                 updatePasswordForm.touched.currentPassword &&
                 updatePasswordForm.errors.currentPassword
+                  ? (updatePasswordForm.errors.currentPassword as string)
+                  : ""
               }
               value={updatePasswordForm.values.currentPassword}
               onChange={updatePasswordForm.handleChange}
@@ -195,7 +195,7 @@ const Manage = () => {
               }}
               error={
                 updatePasswordForm.touched.password &&
-                updatePasswordForm.errors.password
+                (updatePasswordForm.errors.password as string)
               }
               value={updatePasswordForm.values.password}
               onChange={updatePasswordForm.handleChange}
@@ -210,7 +210,7 @@ const Manage = () => {
               }}
               error={
                 updatePasswordForm.touched.confirmPassword &&
-                updatePasswordForm.errors.confirmPassword
+                (updatePasswordForm.errors.confirmPassword as string)
               }
               value={updatePasswordForm.values.confirmPassword}
               onChange={updatePasswordForm.handleChange}
@@ -243,6 +243,8 @@ const Manage = () => {
               }}
               error={
                 updateEmailForm.touched.email && updateEmailForm.errors.email
+                  ? (updateEmailForm.errors.email as string)
+                  : ""
               }
               value={updateEmailForm.values.email}
               onChange={updateEmailForm.handleChange}
@@ -276,6 +278,8 @@ const Manage = () => {
               error={
                 updateInformationForm.touched.username &&
                 updateInformationForm.errors.username
+                  ? (updateInformationForm.errors.username as string)
+                  : ""
               }
               value={updateInformationForm.values.username}
               onChange={updateInformationForm.handleChange}
@@ -291,6 +295,8 @@ const Manage = () => {
               error={
                 updateInformationForm.touched.image &&
                 updateInformationForm.errors.image
+                  ? (updateInformationForm.errors.image as string)
+                  : ""
               }
               value={updateInformationForm.values.image}
               onChange={updateInformationForm.handleChange}
@@ -306,6 +312,8 @@ const Manage = () => {
               error={
                 updateInformationForm.touched.bio &&
                 updateInformationForm.errors.bio
+                  ? (updateInformationForm.errors.bio as string)
+                  : ""
               }
               value={updateInformationForm.values.bio}
               onChange={updateInformationForm.handleChange}
@@ -329,7 +337,7 @@ const Manage = () => {
               ]}
               error={
                 updateInformationForm.touched.gender &&
-                updateInformationForm.errors.gender
+                updateInformationForm.errors.gender as string
               }
               value={updateInformationForm.values.gender}
               onChange={updateInformationForm.handleChange}
@@ -344,7 +352,7 @@ const Manage = () => {
               }}
               error={
                 updateInformationForm.touched.dob &&
-                updateInformationForm.errors.dob
+                updateInformationForm.errors.dob as string
               }
               value={updateInformationForm.values.dob}
               onChange={updateInformationForm.handleChange}

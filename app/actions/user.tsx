@@ -2,7 +2,6 @@ import axios from "axios";
 import { getCookie, removeCookie } from "./auth";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
-import { set } from "zod";
 import { Dispatch, SetStateAction } from "react";
 // imp
 export const fetchProfile = async () => {
@@ -231,7 +230,7 @@ export const updatePassword = async ({
   const token = getCookie("auth-token");
   if (token) {
     try {
-      const response = await axios.patch(
+       await axios.patch(
         `${process.env.NEXT_PUBLIC_HOST}/user/profile/updatePassword`,
         {
           oldPassword: currentPassword,
@@ -254,6 +253,7 @@ export const updatePassword = async ({
       console.log(e);
       toast.error("An unexpected error occurred.");
       const errors = e.response?.data.errors
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((error: any) => error.message)
         .join(", ");
       toast.error(errors);
@@ -277,7 +277,7 @@ export const updateEmail = async ({
   const token = getCookie("auth-token");
   if (token) {
     try {
-      const response = await axios.put(
+      await axios.put(
         `${process.env.NEXT_PUBLIC_HOST}/user/profile/updateEmail`,
         {
           email,
@@ -299,6 +299,7 @@ export const updateEmail = async ({
       toast.error("An unexpected error occurred.");
       toast.error(e.response.data.message);
       const errors = e.response?.data.errors
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((error: any) => error.message)
         .join(", ");
       toast.error(errors);
@@ -387,7 +388,7 @@ export const updateUserInformation = async ({
   };
   if (token) {
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `${process.env.NEXT_PUBLIC_HOST}/user/profile`,
         {
           ...data,
@@ -404,6 +405,7 @@ export const updateUserInformation = async ({
       console.log(e);
       toast.error("An unexpected error occurred.");
       const errors = e.response?.data.errors
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((error: any) => error.message)
         .join(", ");
       toast.error(errors);

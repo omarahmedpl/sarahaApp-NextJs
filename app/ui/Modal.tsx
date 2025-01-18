@@ -1,11 +1,9 @@
 import {
-  Description,
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { useState } from "react";
 interface ModalProps {
   title: string;
   isOpen: boolean;
@@ -14,7 +12,6 @@ interface ModalProps {
 function Modal({
   modalProps,
   children,
-  ...props
 }: {
   modalProps: ModalProps;
   children?: React.ReactNode;

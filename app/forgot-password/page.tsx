@@ -1,14 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createFormikConfig } from "../utils/formik";
-import { create } from "domain";
+import { CreateFormikConfig } from "../utils/formik";
 import { forgetPassowrdSchema } from "../actions/schema";
 import CustomInput from "../ui/CustomInput";
-import { forgetPassword, setCookie } from "../actions/auth";
+import { forgetPassword } from "../actions/auth";
 
 const ForgetPassword = ({}) => {
   const [loading, setLoading] = useState(false);
-  const forgetPasswordForm = createFormikConfig(
+  const forgetPasswordForm = CreateFormikConfig(
     {
       email: "",
     },
@@ -38,7 +37,7 @@ const ForgetPassword = ({}) => {
           width="w-full"
           error={
             forgetPasswordForm.errors.email && forgetPasswordForm.touched.email
-              ? forgetPasswordForm.errors.email
+              ? forgetPasswordForm.errors.email as string
               : ""
           }
           value={forgetPasswordForm.values.email}

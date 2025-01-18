@@ -1,4 +1,4 @@
-import { FaLock, FaPhone, FaUser } from "react-icons/fa";
+import { FaLock, FaUser } from "react-icons/fa";
 import { z } from "zod";
 import { FooterLinkInterface, NavLink } from "./definations";
 import { GiExitDoor, GiGearHammer } from "react-icons/gi";

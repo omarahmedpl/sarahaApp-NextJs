@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { FC } from "react";
 
-interface ILoadingProps {}
-const Loading: FC<ILoadingProps> = ({}) => {
+const Loading = ({}) => {
   return (
     <div>
       <div className="fixed top-0 left-0 w-full h-full bg-[#f5f8fa] z-50 flex justify-center items-center">

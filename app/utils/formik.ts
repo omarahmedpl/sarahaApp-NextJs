@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 
-export const createFormikConfig = (initialValues, validationSchema, onSubmit) => {
+export const CreateFormikConfig = (initialValues, validationSchema, onSubmit) => {
   return useFormik({
     initialValues,
     validationSchema,

@@ -36,10 +36,14 @@ export interface SignUpFormValues {
   confirmPassword: string;
   phone: string;
 }
-export type FormState = {
+export interface FormState {
   errors?: Record<string, string[]>;
+  formData: {
+    email?: string;
+    password?: string;
+  };
   message?: string;
-};
+}
 
 export interface UserDataInterface {
   _id: string;
