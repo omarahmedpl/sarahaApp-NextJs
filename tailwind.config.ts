@@ -9,8 +9,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#10BBB3",
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "2rem",
+          xl: "8rem",
+          lg: "6rem",
+        },
       },
     },
   },

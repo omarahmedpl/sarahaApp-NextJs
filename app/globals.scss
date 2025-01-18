@@ -1,0 +1,46 @@
+@mixin btn($color: #10bbb3) {
+  color: $color;
+  background-color: transparent;
+  border-color: $color;
+  border: 1px solid;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: 0.5s;
+  &:hover {
+    background-color: $color;
+    color: #fff;
+  }
+  &:disabled {
+    opacity: 0.5;
+    &:hover {
+      background-color: transparent;
+      border-color: $color;
+      color: $color;
+    }
+  }
+}
+
+.btn-primary {
+  @include btn;
+}
+
+.btn-danger {
+  @include btn(#f00);
+}
+
+.btn-success {
+  @include btn(#0f0);
+}
+
+.btn-warning {
+  @include btn(#ff0);
+}
+
+.btn-info {
+  @include btn(#00f);
+}
+
+.btn-secondary {
+  @include btn(#666);
+}
